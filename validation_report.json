@@ -1,0 +1,24 @@
+{
+  "n_rows": 1,
+  "n_cols": 7,
+  "columns": {
+    "id": "int64",
+    "nom": "object",
+    "age": "int64",
+    "sexe": "object",
+    "diagnostic": "object",
+    "date_consultation": "object",
+    "score_risque": "float64"
+  },
+  "missing_counts": {
+    "id": 0,
+    "nom": 0,
+    "age": 0,
+    "sexe": 0,
+    "diagnostic": 0,
+    "date_consultation": 0,
+    "score_risque": 0
+  },
+  "duplicate_id_rows": 0,
+  "id_unique_ok": true
+}

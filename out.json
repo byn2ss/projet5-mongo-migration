@@ -1,0 +1,11 @@
+[
+  {
+    "id": 1,
+    "age": 34,
+    "date_consultation": "2024-10-11",
+    "diagnostic": "Diabete",
+    "nom": "Ali",
+    "score_risque": 0.72,
+    "sexe": "M"
+  }
+]
