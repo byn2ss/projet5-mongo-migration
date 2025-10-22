@@ -1,5 +1,3 @@
-Parfait 👍 voici ton **README complet**, 100 % corrigé, sans emoji, avec la structure du projet correctement formatée.
-Tu peux **copier-coller ce bloc entier** dans ton fichier `README.md` sur VS Code.
 
 ---
 
