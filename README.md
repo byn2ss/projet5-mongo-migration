@@ -49,3 +49,6 @@ db.createUser({user:"nurse", pwd:"<mdp>",roles:[{role:"read",     db:"clinique"}
 - Si votre `src/migrate.py` n’expose pas `smart_cast`/`validation_report`, les tests utilisent une version fallback.
 - Ajoutez des tests CLI/CRUD supplémentaires si besoin.
 ```
+
+## Intégration continue
+![Tests](https://github.com/byn2ss/projet5-mongo-migration/actions/workflows/ci.yml/badge.svg)
