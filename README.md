@@ -65,31 +65,26 @@ cd projet5-mongo-migration
 
 2️⃣ Créer un fichier .env à la racine du projet
 MONGO_INITDB_ROOT_USERNAME=admin
-MONGO_INITDB_ROOT_PASSWORD=Mongo2025!
+MONGO_INITDB_ROOT_PASSWORD=xxxxxx
 MONGO_DB=clinique
 MONGO_COLLECTION=patients
 
-
-🛡️ Le .env est ignoré par Git → aucune fuite de secrets sur GitHub
+(Le .env est ignoré par Git → aucune fuite de secrets sur GitHub)
 
 3️⃣ Lancer MongoDB + Migration automatique via Docker
 docker compose up --build
-
-
-➡️ Cela va automatiquement :
+Cela va automatiquement :
 
 Démarrer MongoDB
 
 Valider le fichier CSV
 
 Insérer les données dans clinique.patients
+capture d'écran dans le dossier docs
 
 4️⃣ Vérifier le résultat
 
-Connexion via MongoDB Compass ou Shell :
-
-mongodb://admin:<password>@localhost:27017/?authSource=admin
-
+capture d'écran dans le dossier docs
 
 📍 Base attendue : clinique
 📍 Collection attendue : patients
