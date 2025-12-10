@@ -1,230 +1,140 @@
 
----
-
-```markdown
 # Projet 5 – Migration des données médicales vers MongoDB (Docker + CI + Cloud)
 
-## Contexte
+## 🎯 Contexte
 
 Ce projet a été réalisé dans le cadre de ma mission en tant que Data Engineer chez DataSoluTech.  
-L’objectif est de migrer un dataset de données médicales de patients (au format CSV) vers une base MongoDB, afin d’assurer une meilleure scalabilité, performance et sécurité.
+L’objectif client : migrer un dataset médical CSV dans une base MongoDB afin de garantir **scalabilité**, **performance**, **sécurité** et **maintenabilité**.
 
-Ce projet intègre la conteneurisation Docker, la validation des données, les tests unitaires et l’intégration continue (CI) via GitHub Actions.
-
----
-
-## Objectifs du projet
-
-- Migrer les données CSV vers MongoDB  
-- Conteneuriser MongoDB et le script de migration avec Docker  
-- Vérifier l’intégrité et le typage des données avant et après migration  
-- Automatiser les tests unitaires avec Pytest  
-- Mettre en place une pipeline CI/CD avec GitHub Actions  
-- Documenter et versionner le projet pour assurer sa maintenabilité  
+Ce projet inclut : 🚀  
+✔ Conteneurisation (MongoDB + script de migration)  
+✔ Validation & typage des données  
+✔ Tests unitaires & CI/CD GitHub Actions  
+✔ Documentation complète & prête pour audit technique  
+✔ Architecture Cloud AWS (DocumentDB et S3)
 
 ---
 
-## Stack technique
+## 📊 Schéma de la base de données
+
+Voici la structure de notre collection MongoDB `patients_records` :
+
+![Schéma de la base de données](docs/schema_bdd.jpg)
+
+---
+
+## 🧰 Stack technique
 
 | Outil / Technologie | Rôle |
 |----------------------|------|
 | Python 3.11 | Développement du script de migration |
-| Pandas | Lecture et transformation du CSV |
-| PyMongo | Connexion et insertion dans MongoDB |
-| MongoDB 7 | Base NoSQL pour stocker les données médicales |
-| Docker / Docker Compose | Conteneurisation de MongoDB |
+| Pandas | Lecture & transformation du CSV |
+| PyMongo | Connexion & insertion MongoDB |
+| MongoDB 7 | Base NoSQL scalable |
+| Docker & Docker Compose | Conteneurisation |
 | Pytest | Tests unitaires |
 | GitHub Actions | Intégration continue |
-| VS Code | Environnement de développement |
+| VS Code | IDE |
 
 ---
 
-## Structure du projet
+## 📁 Structure du projet
 
-```
-
+```plaintext
 projet5-mongo-migration/
-├── src/                     # Scripts Python principaux
-│   ├── migrate.py           # Fonctions de migration
-│   └── migrate_cli.py       # Interface CLI pour exécuter la migration
+├── src/
+│   ├── migrate.py
+│   └── migrate_cli.py
 ├── scripts/
-│   └── migrate_dry_run.py   # Validation des données (sans insertion)
+│   └── migrate_dry_run.py
 ├── tests/
-│   └── test_cast_and_validate.py # Tests unitaires Pytest
+│   └── test_cast_and_validate.py
 ├── data/
-│   └── patients_sample.csv  # Dataset d'exemple
-├── docker-compose.yml       # Déploiement MongoDB
-├── requirements.txt         # Dépendances Python
-├── README.md                # Documentation du projet
-└── .github/workflows/ci.yml # Pipeline CI
+│   └── patients_sample.csv
+├── docs/
+│   └── schema_bdd.jpg
+├── docker-compose.yml
+├── Dockerfile
+├── requirements.txt
+└── README.md
 
-````
-
----
-
-## Installation et exécution
-
-### 1. Cloner le dépôt
-```bash
+Installation & Exécution (100% Docker)
+1️⃣ Cloner le dépôt
 git clone git@github.com:byn2ss/projet5-mongo-migration.git
 cd projet5-mongo-migration
-````
 
-### 2. Créer et activer l'environnement virtuel
+2️⃣ Créer un fichier .env à la racine du projet
+MONGO_INITDB_ROOT_USERNAME=admin
+MONGO_INITDB_ROOT_PASSWORD=Mongo2025!
+MONGO_DB=clinique
+MONGO_COLLECTION=patients
 
-```bash
-python -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt
-```
 
-### 3. Démarrer MongoDB avec Docker
+🛡️ Le .env est ignoré par Git → aucune fuite de secrets sur GitHub
 
-```bash
-docker compose up -d
-```
+3️⃣ Lancer MongoDB + Migration automatique via Docker
+docker compose up --build
 
-### 4. Vérifier le conteneur MongoDB
 
-```bash
-docker ps
-```
+➡️ Cela va automatiquement :
 
-### 5. Vérification à blanc
+Démarrer MongoDB
 
-```bash
-python scripts/migrate_dry_run.py --csv data/patients_sample.csv --id-field id
-```
+Valider le fichier CSV
 
-### 6. Exécuter la migration réelle
+Insérer les données dans clinique.patients
 
-```bash
-python src/migrate_cli.py \
-  --csv data/patients_sample.csv \
-  --export-json out.json \
-  --mongo-uri "mongodb://admin:admin123@localhost:27017/?authSource=admin" \
-  --db clinique \
-  --collection patients \
-  --id-field id
-```
+4️⃣ Vérifier le résultat
 
----
+Connexion via MongoDB Compass ou Shell :
 
-## Tests unitaires
+mongodb://admin:<password>@localhost:27017/?authSource=admin
 
-Exécuter les tests :
 
-```bash
+📍 Base attendue : clinique
+📍 Collection attendue : patients
+
+🧪 Tests unitaires
 pytest
-```
-
-Vérifie :
-
-* la conversion automatique des champs “date” en datetime
-* la détection des doublons sur l’ID
-* la bonne structure du DataFrame après casting
-
----
-
-## Docker
-
-Le conteneur MongoDB est défini dans `docker-compose.yml` :
-
-```yaml
-services:
-  mongo-medical:
-    image: mongo:7
-    container_name: mongo-medical
-    ports:
-      - "27017:27017"
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: admin
-      MONGO_INITDB_ROOT_PASSWORD: admin123
-```
-
----
-
-## Intégration continue (CI)
-
-Le workflow GitHub Actions (`.github/workflows/ci.yml`) :
-
-* s’exécute sur les branches main, develop et feature/*
-* installe les dépendances
-* lance les tests Pytest automatiquement
-
-![Tests](https://github.com/byn2ss/projet5-mongo-migration/actions/workflows/ci.yml/badge.svg)
-
----
-
-## Sécurité et utilisateurs MongoDB
-
-Des utilisateurs sont créés lors de l’initialisation :
-
-* admin : droits complets sur toutes les bases
-* nurse : lecture seule sur la base clinique
-
-Connexion avec authentification :
-
-```bash
-mongodb://admin:admin123@localhost:27017/?authSource=admin
-```
-
----
-
-## Résultats du projet
-
-* Migration CSV → MongoDB réussie
-* Validation des données automatisée
-* Pipeline CI opérationnelle (tests automatisés)
-* Documentation complète et claire
-* Projet prêt pour le déploiement cloud (AWS, DocumentDB)
-
----
-
-## Hébergement Cloud (optionnel – extension projet)
-
-Le projet a été conçu pour pouvoir être facilement déployé sur le Cloud, notamment via AWS.
-Voici les principales options d’intégration :
-
-### 1. AWS DocumentDB (compatible MongoDB)
-
-* Héberge la base de données MongoDB dans un environnement managé et sécurisé.
-* Connexion identique à MongoDB local :
-
-  ```bash
-  mongodb+srv://admin:<password>@cluster0.<id>.amazonaws.com/clinique
-  ```
-* Gère automatiquement les sauvegardes, la haute disponibilité et le chiffrement.
-
-### 2. AWS S3
-
-* Stockage des fichiers CSV et exports JSON (patients_sample.csv, out.json, validation_report.json).
-* Intégration directe via boto3 :
-
-  ```python
-  import boto3
-  s3 = boto3.client('s3')
-  s3.upload_file('out.json', 'mon-bucket-s3', 'exports/out.json')
-  ```
-
-### 3. AWS ECS ou Docker Hub
-
-* Hébergement du conteneur MongoDB et du script de migration avec Docker.
-* Build et push :
-
-  ```bash
-  docker build -t projet5-mongo .
-  docker tag projet5-mongo byn2ss/projet5-mongo:latest
-  docker push byn2ss/projet5-mongo:latest
-  ```
-* Puis déploiement sur ECS ou sur une VM EC2 via `docker compose up -d`.
-
-### 4. Monitoring et sécurité
-
-* Utilisation de CloudWatch pour suivre les logs et performances MongoDB.
-* Authentification IAM et rotation automatique des clés d’accès.
-
-Cette architecture permet une migration complète, scalable et sécurisée des données médicales vers le cloud AWS.
 
 
+Les tests garantissent :
+✔ Typage correct (dates converties en datetime)
+✔ Absence de doublons sur id
+✔ Structure correcte du DataFrame
 
+➡️ Automatisés dans GitHub Actions
+
+🐳 Docker – Infrastructure du projet
+
+Services Docker :
+
+Service	Description
+mongodb	Base de données NoSQL
+migration	Service Python qui exécute la migration
+
+Fonctionnalités Docker :
+✔ 🔄 Volume persistant pour MongoDB
+✔ 🌐 Réseau Docker privé (mongo_network)
+✔ 📦 Migration lancée automatiquement
+
+🔐 Authentification & Sécurité
+
+Deux rôles MongoDB configurés :
+
+Utilisateur	Rôle	Accès
+admin	Administrateur	Écriture & administration
+nurse	Lecture seule	Lecture sur clinique
+
+🔸 Les identifiants exacts sont fournis via .env
+🔸 Aucun mot de passe visible dans le code ou sur GitHub
+
+☁️ Intégration Cloud AWS — Documentation fournie
+Service AWS	Utilité
+Amazon DocumentDB	Hébergement managé compatible MongoDB
+Amazon ECS	Hébergement des conteneurs Docker
+Amazon S3	Stockage CSV & exports JSON
+Amazon CloudWatch	Logs & Monitoring
+IAM	Contrôle d’accès & sécurité
+
+➡️ Le projet est prêt pour un déploiement cloud
