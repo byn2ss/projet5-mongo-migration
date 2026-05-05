@@ -1,3 +1,4 @@
+<img width="387" height="336" alt="Capture d’écran 2026-05-05 à 21 35 58" src="https://github.com/user-attachments/assets/f19b4fcc-8b82-4959-b9be-93574af9163a" />
 
 # Projet 5 – Migration des données médicales vers MongoDB (Docker + CI + Cloud)
 
@@ -14,12 +15,42 @@ Ce projet inclut : 🚀
 ✔ Architecture Cloud AWS (DocumentDB et S3)
 
 ---
+Schemas du processus de migration : 
+
+<img width="892" height="431" alt="schema_migration" src="https://github.com/user-attachments/assets/f323483e-84c6-4b11-a6b5-a744215867fa" />
+e projet repose sur un flux de données automatisé et conteneurisé, structuré autour de trois piliers :
+
+1. Le Flux ETL (Horizontal)
+
+EXTRACT : Récupération des données brutes depuis un fichier CSV via un volume Docker.
+
+TRANSFORM : Traitement par scripts Python (nettoyage, typage des données et génération du hash patient_id).
+
+LOAD : Chargement final des données transformées dans MongoDB (conversion CSV vers BSON).
+
+2. Infrastructure & Orchestration
+
+L'intégralité du pipeline est isolée sous Docker pour garantir :
+
+Conteneurisation : Isolation des services Python et MongoDB.
+
+Orchestration : Communication sécurisée et automatisée entre les services via un réseau dédié.
+
+3. Points Forts de l'Architecture
+
+Modularité : Séparation stricte entre le traitement et le stockage, facilitant la maintenance.
+
+Automatisation : Pipeline complet exécutable via une commande unique (docker-compose up).
+
+Reproductibilité : Environnement identique quel que soit le système hôte.
 
 ## 📊 Schéma de la base de données
 
 Voici la structure de notre collection MongoDB `patients_records` :
 
-![Schéma de la base de données](docs/schema_bdd.jpg)
+![Schéma de la base de données](docs/schema_bdd.jpg) 
+<img width="761" height="321" alt="schemascollectionpatient" src="https://github.com/user-attachments/assets/ad3d98b7-3486-4cbc-9737-fb3e6d2dc943" />
+
 
 ---
 
