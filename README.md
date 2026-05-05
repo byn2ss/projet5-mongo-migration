@@ -1,5 +1,3 @@
-<img width="387" height="336" alt="Capture d’écran 2026-05-05 à 21 35 58" src="https://github.com/user-attachments/assets/f19b4fcc-8b82-4959-b9be-93574af9163a" />
-
 # Projet 5 – Migration des données médicales vers MongoDB (Docker + CI + Cloud)
 
 ## 🎯 Contexte
